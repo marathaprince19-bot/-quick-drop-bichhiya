@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Drop Bichhiya</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+
+    header {
+      background: #087f5b;
+      color: white;
+      padding: 22px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+    }
+
+    .notice {
+      background: #d3f9d8;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      box-shadow: 0 2px 8px #00000012;
+    }
+
+    .emoji {
+      font-size: 48px;
+      margin: 8px;
+    }
+
+    .price {
+      color: #087f5b;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    button {
+      border: 0;
+      background: #087f5b;
+      color: white;
+      padding: 11px 14px;
+      border-radius: 7px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .cart {
+      margin: 15px;
+      padding: 18px;
+      background: white;
+      border-radius: 12px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Quick Drop Bichhiya 🛍️</h1>
+  <p>Your local shopping destination</p>
+</header>
+
+<div class="notice">
+  🎉 Welcome! Shop your everyday essentials.
+</div>
+
+<main>
+  <div class="products" id="products"></div>
+
+  <section class="cart">
+    <h2>🛒 Your Cart</h2>
+    <div id="cartItems">Your cart is empty.</div>
+    <h3 id="total">Total: ₹0</h3>
+    <button onclick="checkout()">Order on WhatsApp</button>
+  </section>
+</main>
+
+<footer>
+  Quick Drop Bichhiya © 2026
+</footer>
+
+<script>
+  const products = [
+    { name: "Type-C Cable", price: 99, icon: "🔌" },
+    { name: "Mobile Stand", price: 149, icon: "📱" },
+    { name: "Wireless Earbuds", price: 799, icon: "🎧" },
+    { name: "Fast Charger", price: 499, icon: "🔋" },
+    { name: "Phone Cover", price: 199, icon: "📲" },
+    { name: "USB Cable", price: 79, icon: "🔗" }
+  ];
+
+  let cart = [];
+
+  function renderProducts() {
+    document.getElementById("products").innerHTML =
+      products.map((p, i) => `
+        <div class="card">
+          <div class="emoji">${p.icon}</div>
+          <h3>${p.name}</h3>
+          <p class="price">₹${p.price}</p>
+          <button onclick="addToCart(${i})">Add to Cart</button>
+        </div>
+      `).join("");
+  }
+
+  function addToCart(index) {
+    cart.push(products[index]);
+    renderCart();
+  }
+
+  function renderCart() {
+    const items = document.getElementById("cartItems");
+
+    if (cart.length === 0) {
+      items.textContent = "Your cart is empty.";
+    } else {
+      items.innerHTML = cart.map(p =>
+        `<p>${p.name} — ₹${p.price}</p>`
+      ).join("");
+    }
+
+    const total = cart.reduce((sum, p) => sum + p.price, 0);
+    document.getElementById("total").textContent = "Total: ₹" + total;
+  }
+
+  function checkout() {
+    if (cart.length === 0) {
+      alert("Please add a product first!");
+      return;
+    }
+
+    const total = cart.reduce((sum, p) => sum + p.price, 0);
+    const items = cart.map(p => p.name + " - ₹" + p.price).join("\n");
+
+    const message =
+      "Hello Quick Drop Bichhiya!\nMy order:\n" +
+      items + "\nTotal: ₹" + total +
+      "\nPlease confirm availability and delivery.";
+
+    const url =
+      "https://wa.me/918819920514?text=" +
+      encodeURIComponent(message);
+
+    window.open(url, "_blank");
+  }
+
+  renderProducts();
+</script>
+
+</body>
+</html>
